@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from collections import Counter
 
-# 🎛️ Argumentos CLI
+# Argumentos CLI
 parser = argparse.ArgumentParser(
     description="Visualização de frequência de palavras por categoria gramatical"
 )
@@ -30,7 +30,7 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-# 📥 Carregamento do CSV
+# Carregamento do CSV
 data_file = args.csv
 try:
     df = pd.read_csv(data_file)
@@ -38,7 +38,7 @@ except FileNotFoundError:
     print(f"❌ Arquivo não encontrado: {data_file}")
     exit(1)
 
-# 🎯 Mapeamento do tipo morfossintático
+# Mapeamento do tipo morfossintático
 mapa_tipo = {
     "substantivo": "NOUN",
     "verbo":      "VERB",
@@ -54,7 +54,7 @@ df_filtrado['Lema'] = df_filtrado['Lema'].astype(str).str.lower().str.strip()
 # Remove registros vazios
 df_filtrado = df_filtrado[df_filtrado['Lema'].ne('') & df_filtrado['Lema'].notna()]
 
-# 📊 Computa série de frequências
+# Computa série de frequências
 if 'Frequência' in df_filtrado.columns:
     # CSV já possui coluna de frequência agregada
     freq_series = df_filtrado.set_index('Lema')['Frequência'].astype(int)
@@ -71,7 +71,7 @@ frequencias = top.values.tolist()
 # Extensão de saída
 ext = args.formato
 
-# 📈 Gráfico de barras
+# Gráfico de barras
 if args.grafico == 'bar':
     plt.figure(figsize=(12, 8))
     bars = plt.barh(lemas[::-1], frequencias[::-1], color='#4c72b0')
@@ -90,7 +90,7 @@ if args.grafico == 'bar':
     plt.show()
     print(f"📦 Exportado: {out_file}")
 
-# ☁️ Nuvem de palavras
+# Nuvem de palavras
 elif args.grafico == 'cloud':
     # usa apenas o top N definido em top
     top_dict = dict(zip(lemas, frequencias))
@@ -105,4 +105,3 @@ elif args.grafico == 'cloud':
     plt.savefig(out_file)
     plt.show()
     print(f"📦 Exportado: {out_file}")
-
